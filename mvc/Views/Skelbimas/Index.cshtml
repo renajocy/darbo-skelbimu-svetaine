@@ -1,0 +1,104 @@
+﻿@model PaginatedList<mvc.Models.Skelbima>
+
+@{
+    ViewData["Title"] = "Index";
+    var error = TempData["Error"] as string;
+    var pavyko = TempData["pavyko"] as string;
+}
+
+<h1>Skelbimai</h1>
+@if (!string.IsNullOrEmpty(error))
+{
+    <h3 class="alert-danger" style="padding:20px">@error</h3>
+}
+@if (!string.IsNullOrEmpty(pavyko))
+{
+    <h3 class="alert-success" style="padding:20px">@pavyko</h3>
+}
+<style>
+    .truncate {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+@{
+    var allDisabled = "";
+    if (@ViewData["CurrentFilter"] as string == null)
+    {
+        allDisabled = "disabled";
+    }
+}
+<p>
+    <a class="btn btn-primary" asp-action="Create">Sukurti naują</a>
+</p>
+<form asp-action="Index" method="get">
+
+
+    <p class="control">
+        <input size="40" placeholder="Ieškoti skelbimo" type="text" name="Raktazodis" class="form-control" value="@ViewData["CurrentFilter"]" style="width: 250px" />
+    </p>
+
+    <p class="control">
+        <div class="btn-group">
+            <button class="btn btn-primary" asp-action="Index" type="submit">
+                Paieška
+            </button>
+            <a class="btn btn-primary @allDisabled" asp-action="Index">Atgal į sąrašą</a>
+        </div>
+    </p>
+
+</form>
+@{
+    mvc.Models.darbasContext db = new darbasContext();
+    var skelbimuKiekis = db.Skelbimas.Count(y => y.FkVartotojasid != null);
+    int kiek = 0;
+}
+
+
+@foreach (var item in Model)
+{
+    <div class="card" style="width: 50rem;">
+        <div class="card-body">
+            <h5 class="card-title">@Html.DisplayFor(modelItem => item.Pavadinimas)</h5>
+            <h6 class="card-subtitle mb-2 text-muted">
+                Užmokestis: @Html.DisplayFor(modelItem => item.Uzmokestis)€,
+                Adresas: @Html.DisplayFor(modelItem => item.Adresas)
+            </h6>
+            <p class="card-text truncate">@Html.DisplayFor(modelItem => item.Aprasymas)</p>
+            <h6 class="card-subtitle mb-2 text-muted">
+                Sukūrimo data: @Html.DisplayFor(modelItem => item.Data)
+            </h6>
+            <a asp-action="Details" asp-route-id="@item.Id" class="card-link">Plačiau...</a>
+        </div>
+    </div>
+    kiek++;
+}
+@if (kiek == 0)
+{
+    <h5>Tokių skelbimų nėra!</h5>
+}
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+@if (Model != null)
+{
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-kategorija="@ViewData["Kategorija"]"
+       asp-route-puslapis="@(Model.PageIndex - 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-primary @prevDisabled">
+        Ankstesnis
+    </a>
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-kategorija="@ViewData["Kategorija"]"
+       asp-route-puslapis="@(Model.PageIndex + 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-primary @nextDisabled ">
+        Kitas
+    </a>
+}

@@ -1,0 +1,24 @@
+﻿@model mvc.Models.Isimintum
+
+@{
+    ViewData["Title"] = "Pamiršti";
+}
+
+<h1>Pamiršti</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <h4>Ar norite pamiršti šį skelbimą?</h4>
+            <h6>@Html.DisplayFor(model => model.FkSkelbimas.Pavadinimas)</h6>
+            <h6>@Html.DisplayFor(model => model.FkSkelbimas.Aprasymas)</h6>
+            <div class="form-group">
+                <input type="submit" value="Pamiršti" class="btn btn-danger" />
+            </div>
+        </form>
+    </div>
+</div>
+<hr />
+<a class="btn btn-primary" asp-controller="Skelbimas" asp-action="Index">Grįžti į skelbimų sąrašą</a>

@@ -1,0 +1,68 @@
+﻿@model mvc.Models.Skelbima
+
+@{
+    ViewData["Title"] = "Redaguoti skelbimą";
+}
+
+<h1>Redaguoti skelbimą</h1>
+@if (User.Identity.Name == (Model.FkVartotojas.EPastas))
+{
+    <h4>@Html.DisplayFor(model => model.Pavadinimas)</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Pavadinimas" class="control-label"></label>
+                    <input asp-for="Pavadinimas" class="form-control" />
+                    <span asp-validation-for="Pavadinimas" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Aprasymas" class="control-label"></label>
+                    <input asp-for="Aprasymas" class="form-control" />
+                    <span asp-validation-for="Aprasymas" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Adresas" class="control-label"></label>
+                    <input asp-for="Adresas" class="form-control" />
+                    <span asp-validation-for="Adresas" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Uzmokestis" class="control-label"></label>
+                    <input asp-for="Uzmokestis" class="form-control" />
+                    <span asp-validation-for="Uzmokestis" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MokejimoBudas" class="control-label"></label>
+                    <select asp-for="MokejimoBudas" class="form-control" asp-items="ViewBag.MokejimoBudas"></select>
+                    <span asp-validation-for="MokejimoBudas" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FkKategorijaid" class="control-label"></label>
+                    <select asp-for="FkKategorijaid" class="form-control" asp-items="ViewBag.FkKategorijaid"></select>
+                    <span asp-validation-for="FkKategorijaid" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Išsaugoti" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <hr />
+        <a class="btn btn-primary" asp-controller="Skelbimas" asp-action="Index">Grįžti į skelbimų sąrašą</a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+}
+else
+{
+    <h2 class="text-center alert-danger">Klaida! Jūs neturite teisės atlikti šios procedūros!</h2>
+    <hr />
+    <a class="btn btn-primary" asp-controller="Skelbimas" asp-action="Index">Grįžti į skelbimų sąrašą</a>
+}
+

@@ -1,0 +1,40 @@
+﻿@model mvc.Models.Isimintum
+
+@{
+    ViewData["Title"] = "Įsiminti skelbimai";
+}
+@{
+    mvc.Models.darbasContext db = new darbasContext();
+    var user = db.Vartotojas.SingleOrDefault(x => x.EPastas.Equals(User.Identity.Name));
+    var isiminta = db.Isiminta.Count(y => y.FkVartotojas.EPastas.Equals(User.Identity.Name));
+    var isiminti = db.Isiminta.Where(y => y.FkVartotojasid == user.Id).ToList();
+}
+<h1>Įsiminti skelbimai</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        @if (isiminta == 0 || isiminta == null)
+        {
+            <dt class="col-sm-12 text-center">
+                Jūs neturite išsaugotų skelbimų!
+            </dt>
+        }
+        else
+        {
+            <dt class="col-sm-12 text-center">
+                Viso įsimintų skelbimų: @isiminta
+            </dt>
+            <hr />
+            @foreach (var skelbimas in db.Isiminta.Where(y => y.FkVartotojas.EPastas.Equals(User.Identity.Name)).ToList())
+            {
+                var skelb = db.Skelbimas.FirstOrDefault(z => z.Id == skelbimas.FkSkelbimasid);
+                <h4 class="text-center">
+                    <a asp-controller="Skelbimas" asp-action="Details" asp-route-id="@skelbimas.FkSkelbimasid">@skelb.Pavadinimas</a>
+                </h4>
+            }
+        }
+    </dl>
+</div>
+<hr />
+<a class="btn btn-primary" asp-controller="Skelbimas" asp-action="Index">Grįžti į skelbimų sąrašą</a>

@@ -1,0 +1,53 @@
+﻿@model mvc.Models.Skelbima
+
+@{
+    ViewData["Title"] = "Kurti skelbimą";
+}
+
+<h1>Kurti skelbimą</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Pavadinimas" class="control-label"></label>
+                <input asp-for="Pavadinimas" class="form-control" />
+                <span asp-validation-for="Pavadinimas" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Aprasymas" class="control-label"></label>
+                <input asp-for="Aprasymas" class="form-control" />
+                <span asp-validation-for="Aprasymas" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Adresas" class="control-label"></label>
+                <input asp-for="Adresas" class="form-control" />
+                <span asp-validation-for="Adresas" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Uzmokestis" class="control-label"></label>
+                <input asp-for="Uzmokestis" class="form-control" />
+                <span asp-validation-for="Uzmokestis" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MokejimoBudas" class="control-label"></label>
+                <select asp-for="MokejimoBudas" class="form-control" asp-items="ViewBag.MokejimoBudas"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="FkKategorijaid" class="control-label"></label>
+                <select asp-for="FkKategorijaid" class="form-control" asp-items="ViewBag.FkKategorijaid"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Sukurti" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<hr />
+<a class="btn btn-primary" asp-controller="Skelbimas" asp-action="Index">Grįžti į skelbimų sąrašą</a>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

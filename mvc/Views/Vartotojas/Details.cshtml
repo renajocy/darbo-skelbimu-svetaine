@@ -1,0 +1,80 @@
+﻿@model mvc.Models.Vartotoja
+
+@{
+    ViewData["Title"] = "Details";
+}
+@{
+    mvc.Models.darbasContext db = new darbasContext();
+    var user = db.Vartotojas.SingleOrDefault(x => x.EPastas.Equals(User.Identity.Name));
+    var skelbimu = db.Skelbimas.Count(y => y.FkVartotojas.EPastas.Equals(Model.EPastas));
+    var komentaru = db.Komentaras.Count(y => y.FkVartotojas.EPastas.Equals(Model.EPastas));
+}
+<h1>Profilis</h1>
+
+<div>
+    <hr />
+    <a class="btn btn-primary" asp-controller="Skelbimas" asp-action="Index">Grįžti į skelbimų sąrašą</a>
+    <dl class="row">
+        <dt class="col-sm-12 text-center">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-12 text-center">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class="col-sm-12 text-center">
+            @Html.DisplayNameFor(model => model.Vardas)
+        </dt>
+        <dd class="col-sm-12 text-center">
+            @Html.DisplayFor(model => model.Vardas)
+        </dd>
+        <dt class="col-sm-12 text-center">
+            @Html.DisplayNameFor(model => model.Telefonas)
+        </dt>
+        <dd class="col-sm-12 text-center">
+            @Html.DisplayFor(model => model.Telefonas)
+        </dd>
+        <dt class="col-sm-12 text-center">
+            @Html.DisplayNameFor(model => model.EPastas)
+        </dt>
+        <dd class="col-sm-12 text-center">
+            @Html.DisplayFor(model => model.EPastas)
+        </dd>
+        <dt class="col-sm-12 text-center">
+            @Html.DisplayNameFor(model => model.Miestas)
+        </dt>
+        <dd class="col-sm-12 text-center">
+            @Html.DisplayFor(model => model.Miestas)
+        </dd>
+        <dt class="col-sm-12 text-center">
+            Sukurtų skelbimų skaičius
+        </dt>
+        <dd class="col-sm-12 text-center">
+            @skelbimu
+        </dd>
+        <dt class="col-sm-12 text-center">
+            Sukurtų komentarų skaičius
+        </dt>
+        <dd class="col-sm-12 text-center">
+            @komentaru
+        </dd>
+        <hr />
+        <h3 class="text-center"><i>@Html.DisplayFor(model => model.Vardas)</i> sukurti skelbimai</h3>
+        @{
+            int kiek = 0;
+            foreach (var skelbimas in db.Skelbimas.Where(y => y.FkVartotojasid == Model.Id).ToList())
+            {
+                <h4 class="text-center"><a asp-controller="Skelbimas" asp-action="Details" asp-route-id="@skelbimas.Id">@skelbimas.Pavadinimas</a></h4>
+                kiek++;
+            }
+            if (kiek == 0)
+            {
+                <h5 class="text-center">Vartotojas nėra sukūręs skelbimų.</h5>
+            }
+        }
+
+    </dl>
+</div>
+<div>
+    <hr />
+    <a class="btn btn-primary" asp-controller="Skelbimas" asp-action="Index">Grįžti į skelbimų sąrašą</a>
+</div>

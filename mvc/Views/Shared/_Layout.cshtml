@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - mvc</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" type="text/css" />
+    <style>
+        body {
+            background-color: #ececec;
+        }
+
+        .navbar {
+            background-color: #cccccc;
+        }
+
+        .footer {
+            background-color: #cccccc;
+        }
+    </style>
+</head>
+<body>
+    @{
+        mvc.Models.darbasContext db = new darbasContext();
+        var user = db.Vartotojas.SingleOrDefault(x => x.EPastas.Equals(User.Identity.Name));
+    }
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="/logo.png" alt="" width="50" height="50"></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Skelbimas" asp-action="Index">Skelbimai</a>
+                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Vartotojas" asp-action="Details" asp-route-id="@user.Id">Profilis</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Vartotojas" asp-action="Isiminti">Įsiminti skelbimai</a>
+                            </li>
+                            <li class="nav-item nav-link text-dark"><i>Prisijungęs kaip <b>@user.Vardas</b></i></li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Atsijungimas">Atsijungti</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Prisijungimas">Prisijungti</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Registracija">Registruotis</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <!-- <div class="container">
+        <main role="main" class="pb-3">
+            @*@RenderBody()*@
+        </main>
+    </div>-->
+    @{
+        var allDisabled = "";
+        if (@ViewData["kategorija"] as string == null)
+        {
+            allDisabled = "disabled";
+        }
+    }
+    <div class="container">
+        <div class="row py-3">
+            <div class="col-3 order-2" id="sticky-sidebar">
+                <div class="sticky-top">
+                    <h1>Kategorijos</h1>
+                    <hr />
+                    <!--
+    <h5>Paieška pagal kategoriją</h5>
+    <div class="form-group row">
+        <form asp-action="Index" method="get">
+            <div class="col-xs-2">
+                <input placeholder="Įveskite dalį kategorijos" type="text" name="kategorija" class="form-control" value="@ViewData["CurrentFilter"]" />
+            </div>
+            <p class="control">
+                <div class="btn-group">
+                    <button class="btn btn-primary" asp-controller="Skelbimas" asp-action="Index" type="submit">
+                        Paieška
+                    </button>
+                    <a class="btn btn-primary @allDisabled" asp-action="Index">Atgal į sąrašą</a>
+                </div>
+            </p>
+        </form>
+    </div>
+    <hr />-->
+                    <h5>Kategorijų sąrašas</h5>
+                    @foreach (var kategorij in db.Kategorijas)
+                    {
+                        <h6>
+                            <a class="link-info" href="/Skelbimas/Index?kategorija=@kategorij.Pavadinimas">@kategorij.Pavadinimas</a>
+                        </h6>
+                    }
+                </div>
+            </div>
+            <div class="col" id="main">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2022 - Darbo paieška - KTU - IFIN-0/1 - Renatas Jočys
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

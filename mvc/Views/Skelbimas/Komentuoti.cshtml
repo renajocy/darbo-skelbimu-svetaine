@@ -1,0 +1,34 @@
+﻿@model mvc.Models.Komentara
+
+@{
+    ViewData["Title"] = "Komentuoti";
+    //var id = ViewData["ID"] as string;
+    //var id = Model.Id;
+}
+
+<h1>Komentuoti</h1>
+
+<h4>@Html.DisplayFor(model => model.Id)</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Komentuoti">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Komentaras" class="control-label"></label>
+                <input asp-for="Komentaras" class="form-control" />
+                <span asp-validation-for="Komentaras" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Sukurti" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<hr />
+<a class="btn btn-primary" asp-controller="Skelbimas" asp-action="Index">Grįžti į skelbimų sąrašą</a>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

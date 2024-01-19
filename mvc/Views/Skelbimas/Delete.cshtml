@@ -1,0 +1,87 @@
+﻿@model mvc.Models.Skelbima
+
+@{
+    ViewData["Title"] = "Naikinti skelbimą";
+}
+
+<h1>Naikinti skelbimą</h1>
+@if (User.Identity.Name == (Model.FkVartotojas.EPastas))
+{
+    <div>
+        <h1>@Html.DisplayFor(model => model.Pavadinimas)</h1>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-12 text-center">
+                @Html.DisplayNameFor(model => model.Aprasymas)
+            </dt>
+            <dt class="col-sm-12 text-center">
+                @Html.DisplayFor(model => model.Aprasymas)
+            </dt>
+            <hr />
+            <dt class="col-sm-12 text-center">
+                @Html.DisplayNameFor(model => model.Uzmokestis)
+            </dt>
+            <dd class="col-sm-12 text-center">
+                @Html.DisplayFor(model => model.Uzmokestis)€
+            </dd>
+            <dt class="col-sm-12 text-center">
+                @Html.DisplayNameFor(model => model.Adresas)
+            </dt>
+            <dt class="col-sm-12 text-center">
+                @Html.DisplayFor(model => model.Adresas)
+            </dt>
+            <dt class="col-sm-12 text-center">
+                @Html.DisplayNameFor(model => model.Data)
+            </dt>
+            <dd class="col-sm-12 text-center">
+                @Html.DisplayFor(model => model.Data)
+            </dd>
+            <dt class="col-sm-12 text-center">
+                @Html.DisplayNameFor(model => model.FkKategorija)
+            </dt>
+            <dd class="col-sm-12 text-center">
+                @Html.DisplayFor(model => model.FkKategorija.Pavadinimas)
+            </dd>
+            <hr />
+            <h3 class="text-center">Kontaktai</h3>
+            <dt class="col-sm-12 text-center">
+                @Html.DisplayNameFor(model => model.FkVartotojas.Vardas)
+            </dt>
+            <dd class="col-sm-12 text-center">
+                @Html.DisplayFor(model => model.FkVartotojas.Vardas)
+            </dd>
+            <dt class="col-sm-12 text-center">
+                @Html.DisplayNameFor(model => model.FkVartotojas.Telefonas)
+            </dt>
+            <dd class="col-sm-12 text-center">
+                @Html.DisplayFor(model => model.FkVartotojas.Telefonas)
+            </dd>
+            <dt class="col-sm-12 text-center">
+                @Html.DisplayNameFor(model => model.FkVartotojas.EPastas)
+            </dt>
+            <dd class="col-sm-12 text-center">
+                <a href="mailto:@Html.DisplayFor(model => model.FkVartotojas.EPastas)">@Html.DisplayFor(model => model.FkVartotojas.EPastas)</a>
+            </dd>
+            <dt class="col-sm-12 text-center">
+                @Html.DisplayNameFor(model => model.MokejimoBudasNavigation)
+            </dt>
+            <dd class="col-sm-12 text-center">
+                @Html.DisplayFor(model => model.MokejimoBudasNavigation.Name)
+            </dd>
+        </dl>
+
+        <h3>Ar jūs įsitikinęs, kad norite panaikinti šį skelbimą?</h3>
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <input type="submit" value="Naikinti skelbimą" class="btn btn-danger" />
+            <a class="btn btn-primary" asp-controller="Skelbimas" asp-action="Index">Grįžti į skelbimų sąrašą</a>
+        </form>
+    </div>
+
+}
+else
+{
+    <h2 class="text-center alert-danger">Klaida! Jūs neturite teisės atlikti šios procedūros!</h2>
+    <hr />
+    <a class="btn btn-primary" asp-controller="Skelbimas" asp-action="Index">Grįžti į skelbimų sąrašą</a>
+}

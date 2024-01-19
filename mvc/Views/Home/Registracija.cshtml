@@ -1,0 +1,63 @@
+﻿@model mvc.Models.Vartotoja
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    var returnUrl = ViewData["ReturnUrl"] as string;
+    var error = TempData["Error"] as string;
+}
+<h1>Registracija</h1>
+@if (!string.IsNullOrEmpty(error))
+{
+    <h2 class="alert-danger" style="padding:20px">@error</h2>
+}
+<div class="row">
+    <div class="col-md-4">
+        <section>
+            <form id="account" method="post">
+                <h4>Įveskite duomenis, kad užsiregistruotumėte:</h4>
+                <hr />
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Vardas"></label>
+                    <input asp-for="Vardas" class="form-control" />
+                    <span asp-validation-for="Vardas" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Slaptazodis"></label>
+                    <input asp-for="Slaptazodis" class="form-control" type="password" />
+                    <span asp-validation-for="Slaptazodis" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PatvirtintiSlaptazodi"></label>
+                    <input asp-for="PatvirtintiSlaptazodi" class="form-control" type="password" />
+                    <span asp-validation-for="PatvirtintiSlaptazodi" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Telefonas"></label>
+                    <input asp-for="Telefonas" class="form-control" />
+                    <span asp-validation-for="Telefonas" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="EPastas"></label>
+                    <input asp-for="EPastas" class="form-control" />
+                    <span asp-validation-for="EPastas" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Miestas"></label>
+                    <input asp-for="Miestas" class="form-control" />
+                    <span asp-validation-for="Miestas" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Registruotis</button>
+                </div>
+            </form>
+        </section>
+        <h5>Turite paskyrą? <a href="prisijungimas" class="link-primary">Prisijunkite!</a></h5>
+    </div>
+</div>
+<hr />
+<a class="btn btn-primary" asp-controller="Skelbimas" asp-action="Index">Grįžti į skelbimų sąrašą</a>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

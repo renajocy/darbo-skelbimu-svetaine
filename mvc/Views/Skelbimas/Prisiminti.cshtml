@@ -1,0 +1,34 @@
+﻿@model mvc.Models.Skelbima
+
+@{
+    ViewData["Title"] = "Prisiminti skelbimą";
+    var id = ViewData["ID"];
+    mvc.Models.darbasContext db = new darbasContext();
+    var user = db.Vartotojas.SingleOrDefault(x => x.EPastas.Equals(User.Identity.Name));
+    var skelbimas = db.Skelbimas.SingleOrDefault(y => y.Id == (int)id);
+}
+
+<h1>Prisiminti skelbimą</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Prisiminti">
+            <h4>Ar norite įsiminti šį skelbimą?</h4>
+            <h6>@skelbimas.Pavadinimas</h6>
+            <h6>@skelbimas.Aprasymas</h6>
+            <div class="form-group">
+                <input type="submit" value="Prisiminti" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<hr />
+
+<div>
+    <a class="btn btn-primary" asp-controller="Skelbimas" asp-action="Index">Grįžti į skelbimų sąrašą</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

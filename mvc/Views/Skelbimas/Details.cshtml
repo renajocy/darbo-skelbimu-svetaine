@@ -1,0 +1,133 @@
+﻿@model mvc.Models.Skelbima
+
+@{
+    ViewData["Title"] = "Details";
+    var error = TempData["Error"] as string;
+    var pavyko = TempData["pavyko"] as string;
+}
+@{
+    mvc.Models.darbasContext db = new darbasContext();
+}
+
+<a class="btn btn-primary" asp-controller="Skelbimas" asp-action="Index">Grįžti į skelbimų sąrašą</a>
+@if (User.Identity.IsAuthenticated)
+{
+    var user = db.Vartotojas.SingleOrDefault(x => x.EPastas.Equals(User.Identity.Name));
+    var isimintasSkelb = db.Isiminta.Where(a => a.FkVartotojasid == user.Id).ToList();
+    int count = 0;
+    foreach (var item in isimintasSkelb)
+    {
+        if (item.FkSkelbimasid == Model.Id)
+        {
+            <a class="btn btn-danger" asp-controller="Isiminti" asp-action="Delete" asp-route-id="@item.Id">Pamiršti skelbimą</a>
+            count++;
+        }
+    }
+    if (count == 0)
+    {
+        <a class="btn btn-primary" asp-action="Prisiminti" asp-route-id="@Model.Id">Įsiminti šį skelbimą</a>
+    }
+}
+
+
+<div>
+    <h1>@Html.DisplayFor(model => model.Pavadinimas)</h1>
+    @if (!string.IsNullOrEmpty(error))
+    {
+        <h3 class="alert-danger" style="padding:20px">@error</h3>
+    }
+    @if (!string.IsNullOrEmpty(pavyko))
+    {
+        <h3 class="alert-success" style="padding:20px">@pavyko</h3>
+    }
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-12 text-center">
+            @Html.DisplayNameFor(model => model.Aprasymas)
+        </dt>
+        <dt class="col-sm-12 text-center">
+            @Html.DisplayFor(model => model.Aprasymas)
+        </dt>
+        <hr />
+        <dt class="col-sm-12 text-center">
+            @Html.DisplayNameFor(model => model.Uzmokestis)
+        </dt>
+        <dd class="col-sm-12 text-center">
+            @Html.DisplayFor(model => model.Uzmokestis)€
+        </dd>
+        <dt class="col-sm-12 text-center">
+            @Html.DisplayNameFor(model => model.Adresas)
+        </dt>
+        <dt class="col-sm-12 text-center">
+            @Html.DisplayFor(model => model.Adresas)
+        </dt>
+        <dt class="col-sm-12 text-center">
+            @Html.DisplayNameFor(model => model.Data)
+        </dt>
+        <dd class="col-sm-12 text-center">
+            @Html.DisplayFor(model => model.Data)
+        </dd>
+        <dt class="col-sm-12 text-center">
+            @Html.DisplayNameFor(model => model.FkKategorija)
+        </dt>
+        <dd class="col-sm-12 text-center">
+            @Html.DisplayFor(model => model.FkKategorija.Pavadinimas)
+        </dd>
+        <hr />
+        <h3 class="text-center">Kontaktai</h3>
+        <dt class="col-sm-12 text-center">
+            @Html.DisplayNameFor(model => model.FkVartotojas.Vardas)
+        </dt>
+        <dd class="col-sm-12 text-center">
+            <a class="text-dark" asp-area="" asp-controller="Vartotojas" asp-action="Details" asp-route-id="@Model.FkVartotojas.Id">@Html.DisplayFor(model => model.FkVartotojas.Vardas)</a>
+        </dd>
+        <dt class="col-sm-12 text-center">
+            @Html.DisplayNameFor(model => model.FkVartotojas.Telefonas)
+        </dt>
+        <dd class="col-sm-12 text-center">
+            @Html.DisplayFor(model => model.FkVartotojas.Telefonas)
+        </dd>
+        <dt class="col-sm-12 text-center">
+            @Html.DisplayNameFor(model => model.FkVartotojas.EPastas)
+        </dt>
+        <dd class="col-sm-12 text-center">
+            <a href="mailto:@Html.DisplayFor(model => model.FkVartotojas.EPastas)">@Html.DisplayFor(model => model.FkVartotojas.EPastas)</a>
+        </dd>
+        <dt class="col-sm-12 text-center">
+            @Html.DisplayNameFor(model => model.MokejimoBudasNavigation)
+        </dt>
+        <dd class="col-sm-12 text-center">
+            @Html.DisplayFor(model => model.MokejimoBudasNavigation.Name)
+        </dd>
+    </dl>
+</div>
+<hr />
+<div class="text-center">
+    <h1 class="text-center">Komentarai</h1>
+    <a class="btn btn-primary" asp-action="Komentuoti" asp-route-id="@Model.Id">Rašyti komentarą</a>
+    @{
+        int kiek = 0;
+        foreach (var item in Model.Komentaras.ToList())
+        {
+            <div class="alert-primary">
+                <h5><a class="text-dark" asp-area="" asp-controller="Vartotojas" asp-action="Details" asp-route-id="@item.FkVartotojas.Id">@item.FkVartotojas.Vardas</a> pakomentavo:</h5>
+                <p> @item.Komentaras</p>
+            </div>
+            kiek++;
+        }
+        if (kiek == 0)
+        {
+            <h5 class="text-center">Komentarų nėra!</h5>
+        }
+    }
+
+</div>
+<div>
+    <hr />
+    <a class="btn btn-primary" asp-controller="Skelbimas" asp-action="Index">Grįžti į skelbimų sąrašą</a>
+    @if (User.Identity.Name == (Model.FkVartotojas.EPastas))
+    {
+        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Redaguoti skelbimą</a>
+        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">Naikinti skelbimą</a>
+    }
+</div>
